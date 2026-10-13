@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Lets the watch app find this phone among the connected nodes. -->
+    <string-array name="android_wear_capabilities" translatable="false">
+        <item>aeye_phone</item>
+    </string-array>
+</resources>

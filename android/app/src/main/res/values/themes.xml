@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Compose draws everything; this only sets the launch window to the overview's background
+         so the first frame does not flash. -->
+    <style name="Theme.Aeye" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/window_background</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+    <color name="window_background">#FFFFFF</color>
+    <color name="icon_background">#5F30B3</color>
+</resources>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Aeye</string>
+    <string name="widget_description">Cursor, Claude &amp; Grok Bot usage — same rows as the Alfred workflow.</string>
+</resources>
