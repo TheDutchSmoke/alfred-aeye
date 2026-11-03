@@ -362,7 +362,7 @@ More info: https://github.com/giovannicoppola/alfred-aeye
 	<key>variablesdontexport</key>
 	<array/>
 	<key>version</key>
-	<string>0.2.1</string>
+	<string>0.2.2</string>
 	<key>webaddress</key>
 	<string>https://github.com/giovannicoppola/alfred-aeye</string>
 </dict>

@@ -19,11 +19,19 @@ anywhere except cursor.com):
 4. The Cursor IDE SQLite state DB (``state.vscdb`` -> ``cursorAuth/accessToken``),
    whose layout is identical on macOS, Linux and Windows.
 
+   Cursor 3.x encrypts that value at rest as ``cursor-safe-storage:v1:<base64>``,
+   where the base64 is Electron ``safeStorage`` output. On macOS we decrypt it
+   with the key Electron keeps in the Keychain item ``Cursor Safe Storage``
+   (read-only; macOS asks once to allow access). Other platforms are skipped.
+
 The dashboard cookie value is ``<workos_sub>::<jwt>``; ``sub`` is the ``sub``
 claim of the JWT, so we can derive the whole cookie from just the token.
 """
 
 import base64
+import ctypes
+import ctypes.util
+import hashlib
 import json
 import os
 import sqlite3
@@ -34,6 +42,10 @@ from pathlib import Path
 
 KEYCHAIN_SERVICE = "cursor-access-token"
 KEYCHAIN_ACCOUNT = "cursor-user"
+
+# Cursor 3.x state-DB tokens: "cursor-safe-storage:v1:" + base64(Electron safeStorage).
+SAFE_STORAGE_PREFIX = "cursor-safe-storage:v1:"
+SAFE_STORAGE_SERVICE = "Cursor Safe Storage"
 
 
 class SessionNotFound(RuntimeError):
@@ -101,6 +113,52 @@ def _from_keyring():
         return None
 
 
+def _aes128_cbc_decrypt(key, iv, data):
+    """AES-128-CBC + PKCS7 via macOS CommonCrypto (no third-party deps, no key on argv)."""
+    lib = ctypes.CDLL(ctypes.util.find_library("System"))
+    fn = lib.CCCrypt
+    fn.restype = ctypes.c_int32
+    fn.argtypes = [
+        ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32,  # op, alg, options
+        ctypes.c_char_p, ctypes.c_size_t, ctypes.c_char_p,  # key, keyLength, iv
+        ctypes.c_char_p, ctypes.c_size_t,                   # dataIn, dataInLength
+        ctypes.c_void_p, ctypes.c_size_t,                   # dataOut, dataOutAvailable
+        ctypes.POINTER(ctypes.c_size_t),                    # dataOutMoved
+    ]
+    out = ctypes.create_string_buffer(len(data) + 16)
+    moved = ctypes.c_size_t(0)
+    # kCCDecrypt=1, kCCAlgorithmAES=0, kCCOptionPKCS7Padding=1
+    status = fn(1, 0, 1, key, len(key), iv, data, len(data), out, len(out), ctypes.byref(moved))
+    if status != 0:
+        raise ValueError("CCCrypt failed (%d)" % status)
+    return out.raw[: moved.value]
+
+
+def _decrypt_safe_storage(value):
+    """Decrypt a ``cursor-safe-storage:v1:`` token, or return ``None``.
+
+    Electron ``safeStorage`` on macOS: ``v10`` + AES-128-CBC, IV of 16 spaces,
+    key = PBKDF2-HMAC-SHA1(<Keychain "Cursor Safe Storage">, "saltysalt", 1003, 16).
+    """
+    if sys.platform != "darwin":
+        return None
+    try:
+        blob = base64.b64decode(value[len(SAFE_STORAGE_PREFIX):])
+        if blob[:3] != b"v10":
+            return None
+        out = subprocess.run(
+            ["security", "find-generic-password", "-s", SAFE_STORAGE_SERVICE, "-w"],
+            capture_output=True, text=True, timeout=30,
+        )
+        password = out.stdout.strip()
+        if not password:
+            return None
+        key = hashlib.pbkdf2_hmac("sha1", password.encode("utf-8"), b"saltysalt", 1003, 16)
+        return _aes128_cbc_decrypt(key, b" " * 16, blob[3:]).decode("utf-8").strip()
+    except Exception:
+        return None
+
+
 def _state_db_candidates():
     """Yield possible Cursor IDE ``state.vscdb`` paths for the current OS."""
     home = Path.home()
@@ -133,7 +191,12 @@ def _from_state_db():
             value = row[0]
             if isinstance(value, bytes):
                 value = value.decode("utf-8", "ignore")
-            return value.strip().strip('"')
+            value = value.strip().strip('"')
+            if value.startswith(SAFE_STORAGE_PREFIX):
+                # Undecryptable (e.g. Keychain access denied) -> hand back the
+                # raw value so the resolver can say why it was skipped.
+                return _decrypt_safe_storage(value) or value
+            return value
     return None
 
 
@@ -173,10 +236,14 @@ def resolve_cookie_value(verbose=False):
     tried = ["$CURSOR_SESSION_TOKEN"]
     saw_api_key = False
     saw_expired = False
+    saw_locked = False
     for name, source in _LOCAL_SOURCES:
         tried.append(name)
         token = source()
         if not token:
+            continue
+        if token.startswith(SAFE_STORAGE_PREFIX):
+            saw_locked = True  # encrypted and could not be decrypted
             continue
         token = token.strip().replace("%3A%3A", "::")
         jwt = token.split("::", 1)[-1]
@@ -197,7 +264,10 @@ def resolve_cookie_value(verbose=False):
         return "%s::%s" % (cid, token)
 
     hint = ""
-    if saw_api_key:
+    if saw_locked:
+        hint = ("\nNote: the Cursor app's session is encrypted; allow Keychain "
+                "access to\n\"Cursor Safe Storage\" when macOS asks.")
+    elif saw_api_key:
         hint = ("\nNote: found an api_key_token (Agent API), but that does not "
                 "authenticate the\nusage dashboard. A *web session* is needed.")
     elif saw_expired:

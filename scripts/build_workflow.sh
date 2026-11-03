@@ -12,14 +12,17 @@ fi
 STAGE="$(mktemp -d)"
 trap 'rm -rf "$STAGE"' EXIT
 
+# .cache holds the developer's own overview output when run outside Alfred — never ship it.
 rsync -a --delete \
   --exclude '__pycache__' --exclude '*.pyc' --exclude 'prefs.plist' \
+  --exclude '.cache' --exclude '.DS_Store' \
   src/ "$STAGE/"
 
 # Optional: include vendor for audit inside the package
 mkdir -p "$STAGE/vendor"
 rsync -a --delete \
-  --exclude '__pycache__' --exclude '*.pyc' --exclude '.venv' \
+  --exclude '__pycache__' --exclude '*.pyc' --exclude '.venv' --exclude '.DS_Store' \
+  --exclude '/*/build' --exclude '*.egg-info' \
   vendor/ "$STAGE/vendor/"
 
 mkdir -p dist

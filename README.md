@@ -36,6 +36,7 @@ Home Screen widgets and an Apple Watch app.
 - [Alfred](https://www.alfredapp.com/) 5 with Powerpack
 - Python 3 (macOS `/usr/bin/python3` is fine; 3.9+)
 - For Cursor rows: signed in to the **Cursor** app on this Mac
+  (Cursor 3.x encrypts its session; macOS asks once to let Aeye read the “Cursor Safe Storage” Keychain item — click **Always Allow**)
 - For Claude rows: **Claude Code** signed in (OAuth in Keychain, or `~/.claude/.credentials.json`)
 - Uncheck unused rows in **Configure Workflow** so you don’t need (or hit) a platform you don’t use
 
@@ -118,6 +119,7 @@ Both upstream packages are **vendored** in this repo (no surprise `pip install` 
 
 # Changelog 🧰
 
+- 2026-11-03: version 0.2.2 — Cursor rows work again with Cursor 3.x, which now encrypts its session token (“Could not find a usable Cursor session token”)
 - 2026-09-22: version 0.2.1 — Claude reset times no longer show a minute or an hour early (API timestamps jitter by ~1s)
 - 2026-09-12: version 0.2.0 — Grok Bot weekly included-usage row (Cursor session)
 - 2026-08-18: version 0.1.0 — initial release (Cursor + Claude, four-row overview, 60s cache)

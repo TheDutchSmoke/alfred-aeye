@@ -16,6 +16,7 @@ Sources:
 |------|---------|
 | Network | Only `https://cursor.com` dashboard endpoints (including `POST /api/dashboard/get-sand-usage-status` for Grok Bot) |
 | Credentials | Reads local Cursor session (`CURSOR_SESSION_TOKEN`, macOS Keychain `cursor-access-token`, optional keyring, or `state.vscdb`). Does not write/refresh tokens |
+| Encrypted session (Aeye patch, 2026-11-03) | Cursor 3.x stores the `state.vscdb` token as `cursor-safe-storage:v1:…` (Electron `safeStorage`). On macOS the vendored `auth.py` reads the Keychain item `Cursor Safe Storage` (read-only; macOS asks once) and decrypts in-process via CommonCrypto (`ctypes`, no key on argv). The decrypted token is only sent to `cursor.com`, as before |
 | Subprocess | macOS: `security find-generic-password` (read-only) |
 | Filesystem | Read-only auth sources; optional CSV write only when `--csv` is passed (workflow does not use this) |
 | Telemetry | None |
