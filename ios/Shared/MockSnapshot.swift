@@ -137,7 +137,18 @@ public enum SampleDataMode {
     /// without writing the user's preference.
     public static var isForcedByLaunchArgument: Bool {
         #if DEBUG
-        ProcessInfo.processInfo.arguments.contains("--screenshot")
+        let args = ProcessInfo.processInfo.arguments
+        return args.contains("--screenshot") || args.contains("--screenshot-settings")
+        #else
+        false
+        #endif
+    }
+
+    /// `--screenshot-settings` does the same and opens the Settings sheet, so the
+    /// Settings shot can be captured from `simctl` without driving a tap.
+    public static var opensSettingsAtLaunch: Bool {
+        #if DEBUG
+        ProcessInfo.processInfo.arguments.contains("--screenshot-settings")
         #else
         false
         #endif

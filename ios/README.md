@@ -43,8 +43,10 @@ Sizes match what App Store Connect expects.
 
 | | |
 |---|---|
-| ![iPhone](docs/screenshots/iphone-overview.png) | ![Watch](docs/screenshots/watch-overview-ultra2.png) |
-| iPhone 6.9" — 1320 x 2868 | Apple Watch Ultra — 410 x 502 |
+| ![iPhone](docs/screenshots/iphone-overview.png) | ![iPhone dark](docs/screenshots/iphone-overview-dark.png) |
+| iPhone 6.9" — 1320 x 2868 | The same view in dark mode |
+| ![Watch](docs/screenshots/watch-overview-ultra2.png) | ![Settings](docs/screenshots/iphone-settings.png) |
+| Apple Watch Ultra — 410 x 502 | Settings — row toggles and the sample-data switch |
 
 ![Widget](docs/screenshots/widget-medium.png)
 
@@ -61,7 +63,23 @@ xcrun simctl install booted DerivedData/Build/Products/Debug-iphonesimulator/Aey
 xcrun simctl status_bar booted override --time "9:41" --batteryState charged --batteryLevel 100
 xcrun simctl launch booted com.giovanni.aeye --screenshot
 xcrun simctl io booted screenshot docs/screenshots/iphone-overview.png
+
+# dark mode
+xcrun simctl ui booted appearance dark
+xcrun simctl launch booted com.giovanni.aeye --screenshot
+xcrun simctl io booted screenshot docs/screenshots/iphone-overview-dark.png
+xcrun simctl ui booted appearance light
+
+# Settings — `--screenshot-settings` is `--screenshot` plus an already-open
+# Settings sheet, so no tap has to be driven from outside the simulator
+xcrun simctl launch booted com.giovanni.aeye --screenshot-settings
+xcrun simctl io booted screenshot docs/screenshots/iphone-settings.png
 ```
+
+Terminate the app (`xcrun simctl terminate booted com.giovanni.aeye`) between captures, or the
+launch argument from the previous run stays in effect. If the status bar shows a `◀ AppName`
+breadcrumb from an earlier app switch, `status_bar override` will not remove it — shut the
+simulator down and boot it again.
 
 Use an iOS 18.x runtime — the iOS 26 simulator runtime here ships without Apple Color Emoji, and
 every meter dot renders as a placeholder box.

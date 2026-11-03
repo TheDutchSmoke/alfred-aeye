@@ -121,6 +121,16 @@ struct SettingsView: View {
                     }
                     .disabled(visibility.enabledRows.isEmpty)
                 }
+
+                Section {
+                    LabeledContent("Version", value: Self.versionString)
+                    Link("Privacy policy", destination: Self.privacyPolicyURL)
+                    Link("Support", destination: Self.supportURL)
+                } header: {
+                    Text("About")
+                } footer: {
+                    Text("Aeye is an independent companion app and is not affiliated with, endorsed by, or sponsored by Cursor, Anthropic, or Alfred. Those names appear only to identify which of your own accounts each row refers to.")
+                }
             }
             .navigationTitle("Settings")
             .toolbar {
@@ -144,6 +154,20 @@ struct SettingsView: View {
                 }
             }
         }
+    }
+
+    // App Review expects the disclaimer and both URLs to be reachable from
+    // inside the app, not only from the landing page — see docs/app-store-submission.md.
+    private static let privacyPolicyURL = URL(
+        string: "https://giovannicoppola.github.io/alfred-aeye/ios-landing/privacy.html"
+    )!
+    private static let supportURL = URL(string: "https://github.com/giovannicoppola/alfred-aeye/issues")!
+
+    private static var versionString: String {
+        let info = Bundle.main.infoDictionary
+        let short = info?["CFBundleShortVersionString"] as? String ?? "—"
+        let build = info?["CFBundleVersion"] as? String ?? "—"
+        return "\(short) (\(build))"
     }
 
     private func labeledStatus(saved: Bool) -> some View {

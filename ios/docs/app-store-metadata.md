@@ -6,18 +6,24 @@ Process and checklist live in [`app-store-submission.md`](app-store-submission.m
 ## Name (30)
 
 ```
-Aeye
+Aeye — Usage Meter
 ```
 
-Fallback if taken: `Aeye — Usage Meter` (18).
+Plain `Aeye` was taken, so the registered name is the fallback (18 characters). The app's own
+display name on the Home Screen is still just **Aeye** (`INFOPLIST_KEY_CFBundleDisplayName`), which
+is allowed — the listing name and the icon label do not have to match.
 
 ## Subtitle (30)
 
 ```
-Cursor & Claude usage limits
+AI coding limits at a glance
 ```
 
-(28 characters.)
+(28 characters.) **No third-party names here.** 1.0.1 (2) was rejected on 1 October 2026 under
+Guideline 4.1(c) (Copycats) because the subtitle was "Cursor & Claude plan meters": the name, the
+subtitle, and the icon cannot contain another developer's brand or product name without their
+approval. The service names stay in the description (as a factual compatibility statement) and in
+the keywords.
 
 ## Promotional text (170)
 

@@ -3,7 +3,7 @@ import UIKit
 
 struct ContentView: View {
     @Environment(AppModel.self) private var model
-    @State private var showSettings = false
+    @State private var showSettings = SampleDataMode.opensSettingsAtLaunch
 
     var body: some View {
         NavigationStack {

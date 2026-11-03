@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Aeye for Android — Privacy Policy</title>
+  <meta name="description" content="Privacy policy for the Aeye Android app, widget, and Wear OS app. Aeye has no account and no server; credentials stay in the Android Keystore on your phone." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #16202b;
+      --ink-soft: #3d4a58;
+      --muted: #5f6d7a;
+      --paper: #f3f6f8;
+      --mist: #d7e2ea;
+      --amber-deep: #8f5414;
+      --radius: 1.25rem;
+      --max: 46rem;
+      --font-display: "Fraunces", Georgia, serif;
+      --font-body: "Figtree", system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: var(--font-body);
+      line-height: 1.65;
+      background:
+        radial-gradient(1200px 600px at 15% -10%, #eef4f8 0%, transparent 55%),
+        linear-gradient(180deg, #eef2f5 0%, var(--paper) 38%, #e9eef2 100%);
+      background-attachment: fixed;
+    }
+    a { color: var(--amber-deep); }
+    .wrap { width: min(100% - 2.5rem, var(--max)); margin-inline: auto; }
+
+    header { padding: 4rem 0 2rem; }
+    .brand {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 700;
+      text-decoration: none;
+      color: var(--ink);
+    }
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 6vw, 3rem);
+      line-height: 1.1;
+      margin: 1.5rem 0 0.5rem;
+    }
+    .updated { color: var(--muted); font-size: 0.95rem; margin: 0; }
+
+    main {
+      background: #fff;
+      border: 1px solid var(--mist);
+      border-radius: var(--radius);
+      padding: clamp(1.5rem, 5vw, 3rem);
+      margin-bottom: 4rem;
+      box-shadow: 0 18px 40px color-mix(in srgb, var(--ink) 8%, transparent);
+    }
+    h2 {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      margin: 2.5rem 0 0.75rem;
+    }
+    main > h2:first-child { margin-top: 0; }
+    p, li { color: var(--ink-soft); }
+    ul { padding-left: 1.25rem; }
+    li { margin-bottom: 0.5rem; }
+    .lede { font-size: 1.1rem; color: var(--ink); }
+
+    table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: 0.95rem; }
+    th, td { text-align: left; padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--mist); vertical-align: top; }
+    th { font-weight: 600; color: var(--ink); }
+    td { color: var(--ink-soft); }
+    .table-scroll { overflow-x: auto; }
+
+    footer { padding: 0 0 4rem; color: var(--muted); font-size: 0.9rem; }
+    footer p { color: var(--muted); }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <a class="brand" href="index.html">Aeye 🦉</a>
+      <h1>Privacy Policy</h1>
+      <p class="updated">Applies to the Aeye Android app, its Home Screen widget, and the Wear OS app, complications and tile. Last updated 16 October 2026.</p>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <main>
+      <p class="lede">Aeye does not collect, transmit, or store any personal data. It has no user account, no analytics, and no server of its own.</p>
+
+      <h2>What Aeye does</h2>
+      <p>Aeye reads the plan-usage figures of the Cursor and Anthropic (Claude) accounts you already have, and shows them as meters on your phone, in a widget, and on your Wear OS watch. It is a viewer. It does not change anything in those accounts.</p>
+
+      <h2>Data we collect</h2>
+      <p><strong>None.</strong> The developer receives no data from this app — not usage figures, not identifiers, not crash reports, not analytics. There is no Aeye account to create and no Aeye server to send anything to.</p>
+
+      <h2>Data stored on your device</h2>
+      <div class="table-scroll">
+        <table>
+          <tr><th>What</th><th>Where</th><th>Why</th></tr>
+          <tr>
+            <td>Cursor and Claude access and refresh tokens</td>
+            <td>Encrypted on the phone with a key held in the Android Keystore; excluded from backups and device transfers</td>
+            <td>To request your usage figures and renew access without asking you to sign in again. Never copied to the watch.</td>
+          </tr>
+          <tr>
+            <td>The most recent usage snapshot</td>
+            <td>App storage on the phone; a copy on the watch</td>
+            <td>So the widget, the complications and the tile can show numbers without a network call, and the watch can display the last known values when the phone is out of range.</td>
+          </tr>
+          <tr>
+            <td>Your row choices and display preferences</td>
+            <td>App storage on the phone</td>
+            <td>To show the same rows across the app, the widget, and the watch.</td>
+          </tr>
+        </table>
+      </div>
+      <p>All of it is removed when you delete the app.</p>
+
+      <h2>Network connections</h2>
+      <p>Aeye connects only to the services whose numbers it displays, over HTTPS, carrying your own credentials as authorization:</p>
+      <ul>
+        <li><code>cursor.com</code> and <code>api2.cursor.sh</code> — Cursor sign-in and usage figures</li>
+        <li><code>claude.ai</code>, <code>claude.com</code>, and <code>platform.claude.com</code> — Claude sign-in</li>
+        <li><code>api.anthropic.com</code> — Claude usage figures</li>
+      </ul>
+      <p>The phone passes the usage snapshot — never your credentials — to your watch through Google Play services' Wearable Data Layer. That normally travels over Bluetooth or Wi-Fi between your own devices; when they are not near each other, Google Play services may relay it through Google's servers, end-to-end encrypted so that only your phone and your watch can read it.</p>
+      <p>There are no other network calls: no third-party SDKs, no advertising networks, no telemetry endpoints. What those services do with the requests is governed by their own privacy policies.</p>
+
+      <h2>Signing in</h2>
+      <p>Sign-in happens in your browser (a Custom Tab), through each service's own login page. Aeye never sees your password. Only the resulting token is returned to the app, and it is stored encrypted with a key held in the Android Keystore.</p>
+
+      <h2>Tracking</h2>
+      <p>Aeye does not track you. It does not use the Advertising ID, does not build a profile, and shares nothing with data brokers or advertisers.</p>
+
+      <h2>Children</h2>
+      <p>Aeye is a developer utility with no social features and no user-generated content. It collects no data from anyone, including children under 13.</p>
+
+      <h2>Changes</h2>
+      <p>If this policy changes, the revised version will be posted on this page with a new date. Material changes will also be noted in the app's release notes.</p>
+
+      <h2>Contact</h2>
+      <p>Aeye for Android is published on Google Play by Cimento Studio. Questions or concerns: email <a href="mailto:cimento.studio.info@gmail.com">cimento.studio.info@gmail.com</a>, or open an issue at <a href="https://github.com/giovannicoppola/alfred-aeye/issues">github.com/giovannicoppola/alfred-aeye/issues</a>.</p>
+    </main>
+  </div>
+
+  <footer>
+    <div class="wrap">
+      <p><a href="https://github.com/giovannicoppola/alfred-aeye">← Back to Aeye</a></p>
+      <p>© Giovanni Coppola · Not affiliated with Cursor, Anthropic, or Alfred.</p>
+    </div>
+  </footer>
+</body>
+</html>

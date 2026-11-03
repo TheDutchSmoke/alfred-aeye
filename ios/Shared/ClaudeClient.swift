@@ -111,10 +111,12 @@ public struct ClaudeClient: Sendable {
         }
         let utilization = dict["utilization"] ?? dict["used_percentage"] ?? dict["percent"]
         var pct = utilizationToPercent(utilization)
+        // Rounded to the minute: the API jitters by ~1s either side
+        // (e.g. 23:59:59.6 instead of 00:00:00), which would show 7pm for an 8pm reset.
         let reset = AeyeFormatting.parseResetDate(
             raw: dict["resets_at"],
             epoch: AeyeJSON.int(dict["resets_at_epoch"])
-        )
+        ).map { Date(timeIntervalSinceReferenceDate: ($0.timeIntervalSinceReferenceDate / 60).rounded() * 60) }
         if let reset, now >= reset { pct = nil }
         return ClaudeLimitWindow(usedPercentage: pct, resetsAt: reset)
     }

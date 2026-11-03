@@ -9,3 +9,6 @@ __pycache__/
 *.egg-info/
 .pytest_cache/
 src/prefs.plist
+
+# Forum drafts live in ~/Documents/alfred-forum-drafts, not in this public repo
+docs/alfred-forum-announcement.md
