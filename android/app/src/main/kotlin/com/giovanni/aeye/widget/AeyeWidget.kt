@@ -3,6 +3,7 @@ package com.giovanni.aeye.widget
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -123,18 +124,19 @@ private fun WidgetContent(snapshot: AeyeSnapshot) {
             Spacer(GlanceModifier.height(5.dp))
             Text("Open Aeye on your phone to refresh", style = TextStyle(color = Secondary, fontSize = 12.sp))
         } else {
+            // Glance drops any child of a Column past the tenth, so the gap is each row's own
+            // padding rather than a Spacer beside it (a Spacer per row lost the fifth row).
             rows.forEach { row ->
-                Spacer(GlanceModifier.height(if (large) 8.dp else 5.dp))
-                WidgetRow(row, compact)
+                WidgetRow(row, compact, topGap = if (large) 8.dp else 5.dp)
             }
         }
     }
 }
 
 @Composable
-private fun WidgetRow(row: OverviewRow, compact: Boolean) {
+private fun WidgetRow(row: OverviewRow, compact: Boolean, topGap: Dp) {
     val textSize: TextUnit = if (compact) 10.sp else 11.sp
-    Column(GlanceModifier.fillMaxWidth()) {
+    Column(GlanceModifier.fillMaxWidth().padding(top = topGap)) {
         if (row.isError) {
             Text(
                 row.titleLine,
