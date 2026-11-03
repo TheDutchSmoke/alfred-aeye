@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
 
         if (BuildConfig.DEBUG && savedInstanceState == null) {
             // `--screenshot` / `--screenshot-settings`, as intent extras:
-            //   adb shell am start -n com.giovanni.aeye/.MainActivity --ez screenshot true
+            //   adb shell am start -n studio.cimento.aeye/com.giovanni.aeye.MainActivity --ez screenshot true
             val settings = intent.getBooleanExtra("screenshot_settings", false)
             if (settings || intent.getBooleanExtra("screenshot", false)) {
                 model.sampleData.isForcedByLaunchArgument = true

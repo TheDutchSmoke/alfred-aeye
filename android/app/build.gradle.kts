@@ -19,9 +19,10 @@ android {
     compileSdk = 37
 
     defaultConfig {
-        // Same identifier as the iOS bundle. The Wear OS app must share it (and the signing key)
-        // for the Data Layer to connect the two.
-        applicationId = "com.giovanni.aeye"
+        // Published by the Cimento Studio Play account, like its other apps; permanent once
+        // uploaded. The Wear OS app must share it (and the signing key) for the Data Layer to
+        // connect the two.
+        applicationId = "studio.cimento.aeye"
         minSdk = 26
         targetSdk = 36
         // Same version as the iOS app it ports.

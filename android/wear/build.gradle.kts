@@ -17,8 +17,8 @@ android {
 
     defaultConfig {
         // The Data Layer only connects apps that share a package name and signing key, so the
-        // watch app is `com.giovanni.aeye` too — as the iOS Watch app is embedded in the iPhone's.
-        applicationId = "com.giovanni.aeye"
+        // watch app is `studio.cimento.aeye` too — as the iOS Watch app is embedded in the iPhone's.
+        applicationId = "studio.cimento.aeye"
         minSdk = 30
         targetSdk = 36
         // Same version as the phone; the code is offset so both can sit in one Play listing.

@@ -87,6 +87,9 @@ android/
   mode surviving a relaunch, Home Screen widget placed from the picker.
 - Wear OS (round emulator, debug and release): app with the sample, empty state, refresh with no
   phone (queued), tile, short-text and ranged-value complications on a watch face.
+- Play prep (16 October 2026): release bundles under `studio.cimento.aeye`, signed with the
+  upload key; the large widget at 4×4 showed only four rows — Glance drops a Column's children
+  past the tenth, and a Spacer per row made eleven — fixed by padding each row instead.
 - **Not run:** the phone ↔ watch round trip over the Data Layer — pairing emulators needs the
   Wear OS companion app and a Google account. Check on real hardware.
 
@@ -111,6 +114,6 @@ points at an Android page (`docs/privacy.html` here, to be published).
 
 - Emoji in text (🕐 🐢 🔥 🎯 🦉 👁️) render in the system emoji font, not Apple Color Emoji.
 - Wear OS Data Layer needs the phone and watch apps to share a package name and signing key;
-  both are `com.giovanni.aeye`.
+  both are `studio.cimento.aeye` (the code's namespace stays `com.giovanni.aeye`).
 - Glance widgets refresh when the app writes a snapshot, plus at most every 30 minutes from the
   system (iOS asks for 15).

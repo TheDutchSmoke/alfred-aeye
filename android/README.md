@@ -4,7 +4,7 @@ Native Android port of the [iOS app](../ios/README.md), kept as close as possibl
 the same five rows as the [Alfred workflow](../README.md), the same wording, data rules, sign-in
 flows and sample mode, and deliberately the same iOS look (large title, inset-grouped Settings
 sheet that stacks over the overview, iOS switches, the shaded circle meter). Plan and parity
-checklist: [`docs/port-plan.md`](docs/port-plan.md).
+checklist: [`docs/port-plan.md`](docs/port-plan.md). Publishing: [`PLAY_STORE.md`](PLAY_STORE.md).
 
 | Row | Source |
 |-----|--------|
@@ -36,7 +36,7 @@ connection.
 |---|---|
 | `:core` | Pure Kotlin, no Android. Port of `ios/Shared`: models and the snapshot JSON (reads what the iOS encoder writes), `AeyeFormatting`, `ClaudeClient` + `ClaudeOAuth`, `CursorClient` + `CursorAuth`, `CredentialsStore`, `AeyeService` (60 s cache, request coalescing), `MockSnapshot`, the Wear protocol and the meter palette. 49 JUnit tests in `core/src/test`. |
 | `:app` | Phone. `ui/ios/` is the iOS look kit (palette, type scale, forms, navigation bar with collapsing large title, page sheets, switches, context menu, SF-Symbol-like icons); `ui/` has one file per iOS view. `widget/` is the Glance widget, `wear/` the Data Layer sender and refresh listener, `Platform.kt` the Keystore secret store and snapshot store. |
-| `:wear` | Wear OS app (`com.giovanni.aeye` as well — the Data Layer only connects apps with the same package name and signing key), complication data source, tile. |
+| `:wear` | Wear OS app (`studio.cimento.aeye` as well — the Data Layer only connects apps with the same package name and signing key), complication data source, tile. |
 
 ## Build & test
 
@@ -60,11 +60,11 @@ Debug builds accept the iOS screenshot launch arguments as intent extras. They f
 without writing the preference, and without the "Sample data" chip:
 
 ```bash
-adb shell am start -n com.giovanni.aeye/.MainActivity --ez screenshot true
-adb shell am start -n com.giovanni.aeye/.MainActivity --ez screenshot_settings true
-adb shell am start -n com.giovanni.aeye/com.giovanni.aeye.wear.WatchActivity --ez screenshot true
+adb shell am start -n studio.cimento.aeye/com.giovanni.aeye.MainActivity --ez screenshot true
+adb shell am start -n studio.cimento.aeye/com.giovanni.aeye.MainActivity --ez screenshot_settings true
+adb shell am start -n studio.cimento.aeye/com.giovanni.aeye.wear.WatchActivity --ez screenshot true
 # watch only: store the labelled sample as if the phone had sent it, for complications and the tile
-adb shell am start -n com.giovanni.aeye/com.giovanni.aeye.wear.WatchActivity --ez seed true
+adb shell am start -n studio.cimento.aeye/com.giovanni.aeye.wear.WatchActivity --ez seed true
 ```
 
 Force-stop the app between captures. **Settings → Sample data → Use sample data** is the
@@ -75,7 +75,8 @@ user-facing switch, as on iOS; signing in turns it off.
 | ![Overview](docs/screenshots/phone-overview.png) | ![Dark](docs/screenshots/phone-overview-dark.png) |
 | ![Settings](docs/screenshots/phone-settings.png) | ![Watch](docs/screenshots/wear-overview.png) |
 
-![Widget](docs/screenshots/widget-medium.png)
+| ![Widget, 4×2](docs/screenshots/widget-medium.png) | ![Widget, 4×4](docs/screenshots/widget-large.png) |
+|---|---|
 
 ## Sign-in
 
@@ -115,6 +116,7 @@ Copy changes only where iOS names an Apple thing: "Keychain" → "Android Keysto
   reply, queued request) build, and the watch's out-of-reach path was exercised on an emulator,
   but pairing a phone and a Wear emulator needs the Wear OS companion app and a Google account, so
   the round trip has not been run. Check it on real hardware before release.
-- Release keystore, Play listing and the privacy page the About section links to
-  (`https://giovannicoppola.github.io/alfred-aeye/android/privacy.html` — drafted in
-  [`docs/privacy.html`](docs/privacy.html), not yet published).
+- Not on Play yet. The privacy page the About section links to
+  (`https://giovannicoppola.github.io/alfred-aeye/android/privacy.html`) is live, published from
+  [`docs/privacy.html`](docs/privacy.html). Upload key, signed bundles, listing and screenshots
+  are ready; the Play Console steps are in [`PLAY_STORE.md`](PLAY_STORE.md).
