@@ -3,7 +3,7 @@
 Everything needed to take `ios/` from source to a review submission, plus the two things that
 can get this particular app rejected.
 
-Current release target: **1.0.1 (build 2)** — submitted for review 23 September 2026, rejected 1 October (subtitle, §7), resubmitted 2 October 2026 — `ios/project.yml`, `MARKETING_VERSION` /
+Current release target: **1.0.1 (build 2)** — submitted for review 23 September 2026, rejected 1 October (subtitle, §7), resubmitted 2 October 2026, **approved and live** (`READY_FOR_SALE`, confirmed via the API 16 October 2026) — `ios/project.yml`, `MARKETING_VERSION` /
 `CURRENT_PROJECT_VERSION`.
 
 ---
@@ -251,6 +251,7 @@ present in each.
 | Date | Version | Outcome |
 |---|---|---|
 | 1 October 2026 | 1.0.1 (2) | **Rejected — Guideline 4.1(c) Copycats.** Subtitle "Cursor & Claude plan meters" used other developers' brand names. Metadata-only fix: subtitle changed to "AI coding limits at a glance" (pushed with `asc_metadata.py --apply`, 2 October 2026); same build resubmitted 2 October 2026, 09:04 UTC — `WAITING_FOR_REVIEW`. Submission ID `9b9a05dc-67c1-4769-8cde-5122067679c5`. |
+| by 16 October 2026 | 1.0.1 (2) | **Approved** — resubmission `COMPLETE`, version `READY_FOR_SALE` (released after approval). |
 
 ## Review notes template
 
