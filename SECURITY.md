@@ -28,6 +28,7 @@ Sources:
 |------|---------|
 | Network | Default path is local-only (Claude Code JSONL). Opt-in `--api` calls `https://api.anthropic.com/api/oauth/usage` with a local OAuth token. Aeye enables `--api` for better limit %. |
 | Credentials | Reads `CLAUDE_CODE_OAUTH_TOKEN` or `~/.claude/.credentials.json` only when `--api` is used |
+| Fable weekly row (Aeye patch, 2026-11-10) | `output/api_usage.py` also reads the Fable `weekly_scoped` row from the same `/api/oauth/usage` reply. No new request, endpoint, or credential |
 | Subprocess | WSL discovery on Windows; timezone helpers (`date`, `timedatectl`, etc.) — read-only |
 | Filesystem | Reads `~/.claude/projects` JSONL; may write under `~/.claude-monitor/` (state/cache) when features are enabled |
 | Telemetry | None observed |

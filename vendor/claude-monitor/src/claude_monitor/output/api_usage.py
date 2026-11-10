@@ -122,6 +122,32 @@ def _from_limits_array(
     return {"five_hour": five, "seven_day": seven}
 
 
+def _scoped_model_window(
+    payload: Dict[str, Any], model: str, now_epoch: Optional[int]
+) -> Optional[Dict[str, Any]]:
+    """Weekly window for one model (e.g. Fable) from the ``limits[]`` list.
+
+    Anthropic reports a per-model weekly cap as a ``weekly_scoped`` row whose
+    ``scope.model.display_name`` names the model. Returns ``None`` when the
+    account has no such row.
+    """
+    items = payload.get("limits")
+    if not isinstance(items, list):
+        return None
+    wanted = model.lower()
+    for item in items:
+        if not isinstance(item, dict) or item.get("kind") != "weekly_scoped":
+            continue
+        scope = item.get("scope")
+        scoped_model = scope.get("model") if isinstance(scope, dict) else None
+        name = (
+            scoped_model.get("display_name") if isinstance(scoped_model, dict) else None
+        )
+        if isinstance(name, str) and wanted in name.lower():
+            return _window(item, now_epoch)
+    return None
+
+
 def _normalize(
     payload: Dict[str, Any],
     captured_at_epoch: int,
@@ -143,6 +169,7 @@ def _normalize(
     return {
         "five_hour": five,
         "seven_day": seven,
+        "seven_day_fable": _scoped_model_window(payload, "fable", now_epoch),
         "captured_at_epoch": captured_at_epoch,
         "stale": bool(stale),
         "source": {"kind": API_KIND},
@@ -173,6 +200,7 @@ def _cached_limits(
         stale = (now_epoch - captured) > ttl_seconds
     limits["five_hour"] = _window(limits.get("five_hour"), now_epoch)
     limits["seven_day"] = _window(limits.get("seven_day"), now_epoch)
+    limits["seven_day_fable"] = _window(limits.get("seven_day_fable"), now_epoch)
     limits["captured_at_epoch"] = captured
     limits["stale"] = bool(stale)
     limits.setdefault("source", {"kind": API_KIND})

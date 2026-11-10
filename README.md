@@ -1,5 +1,5 @@
 # Aeye 🦉
-Keep an 👁️ on your **Cursor**, **Claude**, and **Grok Bot** usage — right from [Alfred](https://www.alfredapp.com/).
+Keep an 👁️ on your **Cursor**, **Claude** (incl. Fable), and **Grok Bot** usage — right from [Alfred](https://www.alfredapp.com/).
 
 <div align="center">
   <img src="src/icon.png" width="128" alt="Aeye icon">
@@ -19,14 +19,14 @@ Home Screen widgets and an Apple Watch app.
 
 - Quickly check how much of your AI quotas you’ve used without opening dashboards
 - One keyword for Cursor, Claude, and Grok Bot
-- Rows that match how the products report usage (Composer/Auto vs other models; Grok Bot weekly; Claude hourly vs weekly)
+- Rows that match how the products report usage (Composer/Auto vs other models; Grok Bot weekly; Claude hourly vs weekly vs Fable weekly)
 
 # Features ✨
 
-- **Five-row overview** — Composer/Auto, Other models, Grok Bot, Hourly, Weekly with green → yellow → red circle meters
+- **Six-row overview** — Composer/Auto, Other models, Grok Bot, Hourly, Weekly, Fable with green → yellow → red circle meters
 - **Cursor** — same split as the spending page; included spend vs limit; days until reset
 - **Grok Bot** — Cursor’s separate weekly included allowance (same Cursor session; hidden if the account has no grant)
-- **Claude** — hourly (5h) session limit + weekly limit; Claude Code icon on the hourly row
+- **Claude** — hourly (5h) session limit + weekly limit + Fable weekly limit; Claude Code icon on the hourly row
 - **Cached overview** (60s) — avoids re-hitting the APIs on every keystroke
 - **Configurable** — keyword + checkboxes for which rows to show (all on by default)
 
@@ -50,7 +50,7 @@ Home Screen widgets and an Apple Watch app.
 # Usage 📖
 
 1. Type the keyword (default: `aieye`)
-2. You’ll see the enabled rows (all five on by default):
+2. You’ll see the enabled rows (all six on by default):
 
 ### Overview (example)
 
@@ -69,6 +69,9 @@ Hourly            🟢⚪⚪⚪⚪⚪⚪⚪⚪⚪  6.0%  (🕐 40%, 5h, 11:30pm)
 
 Weekly            ⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪  1.0%  (🕐 14%, 6d, Tue 8pm) 🎯
                   plan=… · experimental
+
+Fable             🟢⚪⚪⚪⚪⚪⚪⚪⚪⚪  5.0%  (🕐 14%, 6d, Tue 8pm) 🎯
+                  plan=… · Fable weekly limit · experimental
 ```
 
 - **Composer / Auto** / **Other models** — Cursor’s spending-page buckets (`autoPercentUsed` / `apiPercentUsed`)
@@ -78,6 +81,7 @@ Weekly            ⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪  1.0%  (🕐 14%, 6d, Tue 8pm) 
 - Pace emoji after the parenthesis — compares % spent vs % elapsed: 🐢 underspending · 🎯 on track · 🔥 overspending (±8pp band)
 - **Hourly** — Claude 5-hour session limit (Claude Code icon); reset suffix only while a session is active
 - **Weekly** — Claude weekly limit
+- **Fable** — Claude’s separate weekly limit for Fable (a `weekly_scoped` row in the usage API); hidden when the plan has no Fable limit
 
 ### Actions
 
@@ -99,7 +103,7 @@ Claude percentages are labeled **`experimental`** when they come from Anthropic�
 
 # Known issues ⚠️
 
-- Claude weekly/hourly % need Claude Code auth on this machine; without it, those rows may show `n/a`
+- Claude hourly/weekly/Fable % need Claude Code auth on this machine; without it, those rows may show `n/a`
 - Claude % come from Anthropic’s undocumented OAuth usage API (`experimental`); they can change shape without notice
 - Cursor uses Cursor’s undocumented dashboard API; it can change without notice
 - Grok Bot % come from Cursor’s undocumented `get-sand-usage-status` endpoint; the row is omitted when the account has no included Bot allowance
@@ -119,6 +123,7 @@ Both upstream packages are **vendored** in this repo (no surprise `pip install` 
 
 # Changelog 🧰
 
+- 2026-11-10: version 0.3.0 — Fable weekly limit row (Claude; hidden when the plan has none)
 - 2026-11-03: version 0.2.2 — Cursor rows work again with Cursor 3.x, which now encrypts its session token (“Could not find a usable Cursor session token”)
 - 2026-09-22: version 0.2.1 — Claude reset times no longer show a minute or an hour early (API timestamps jitter by ~1s)
 - 2026-09-12: version 0.2.0 — Grok Bot weekly included-usage row (Cursor session)

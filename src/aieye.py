@@ -645,6 +645,29 @@ def _claude_fields(snap: Dict[str, Any]) -> Dict[str, Any]:
     if not seven_reset_label and seven_reset:
         weekly_bits.append(seven_reset)
 
+    # Separate weekly cap for Fable; the key is absent when the plan has none.
+    fable = limits.get("seven_day_fable")
+    fable_present = isinstance(fable, dict)
+    fable = fable if fable_present else {}
+    fable_pct = fable.get("used_percentage")
+    fable_conf = fable.get("confidence") or seven_conf
+    fable_reset = _fmt_reset(fable, with_date=True)
+    fable_reset_dt = _claude_reset_dt(fable)
+    fable_start = (
+        _as_utc(fable_reset_dt) - timedelta(days=7) if fable_reset_dt is not None else None
+    )
+    fable_reset_label = _period_suffix(
+        end=fable_reset_dt,
+        start=fable_start,
+        spent_pct=fable_pct,
+        style="weekday",
+    )
+    fable_bits = [f"plan={plan}", "Fable weekly limit"]
+    if fable_conf and fable_conf != "unknown":
+        fable_bits.append(str(fable_conf))
+    if not fable_reset_label and fable_reset:
+        fable_bits.append(fable_reset)
+
     return {
         "five_pct": five_pct,
         "seven_pct": seven_pct,
@@ -657,14 +680,21 @@ def _claude_fields(snap: Dict[str, Any]) -> Dict[str, Any]:
         "session_active": session_active,
         "hourly_bits": hourly_bits,
         "weekly_bits": weekly_bits,
+        "fable_present": fable_present,
+        "fable_pct": fable_pct,
+        "fable_reset_label": fable_reset_label,
+        "fable_bits": fable_bits,
     }
 
 
 def claude_overview_items(
-    *, include_hourly: bool = True, include_weekly: bool = True
+    *,
+    include_hourly: bool = True,
+    include_weekly: bool = True,
+    include_fable: bool = True,
 ) -> List[Dict[str, Any]]:
-    """Hourly (5h) + weekly limits — Claude Code icon on the hourly row."""
-    if not include_hourly and not include_weekly:
+    """Hourly (5h) + weekly + Fable weekly limits — Claude Code icon on the hourly row."""
+    if not include_hourly and not include_weekly and not include_fable:
         return []
     try:
         fields = _claude_fields(_run_claude_once())
@@ -700,6 +730,20 @@ def claude_overview_items(
                 mods=_cmd_open(URL_CLAUDE, "Open Claude usage"),
             )
         )
+    if include_fable and fields["fable_present"]:
+        items.append(
+            _item(
+                title=(
+                    f"Fable  {_bar(fields['fable_pct'])}  {_pct(fields['fable_pct'])}"
+                    f"{fields['fable_reset_label']}"
+                ),
+                subtitle=" · ".join(fields["fable_bits"]),
+                arg=f"Claude Fable weekly: {_pct(fields['fable_pct'])}"
+                + (fields["fable_reset_label"] or ""),
+                icon=ICON_CLAUDE,
+                mods=_cmd_open(URL_CLAUDE, "Open Claude usage"),
+            )
+        )
     return items
 
 
@@ -720,6 +764,7 @@ def _show_flags() -> Dict[str, bool]:
         "cursor_grok": _env_flag("show_cursor_grok"),
         "claude_hourly": _env_flag("show_claude_hourly"),
         "claude_weekly": _env_flag("show_claude_weekly"),
+        "claude_fable": _env_flag("show_claude_fable"),
     }
 
 
@@ -737,6 +782,7 @@ def build_overview_payload() -> Dict[str, Any]:
     ) + claude_overview_items(
         include_hourly=flags["claude_hourly"],
         include_weekly=flags["claude_weekly"],
+        include_fable=flags["claude_fable"],
     )
     if not items:
         items = [

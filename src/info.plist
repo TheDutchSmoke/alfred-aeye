@@ -188,10 +188,10 @@ More info: https://github.com/giovannicoppola/alfred-aeye
 - For Cursor rows: signed in to the Cursor app on this Mac
 - For Claude rows: Claude Code signed in (OAuth in Keychain)
 - Optional: change the keyword below (default: `!e`), or assign a hotkey
-- Optional: uncheck rows you don’t use (Composer/Auto, Other models, Grok Bot, Hourly, Weekly)
+- Optional: uncheck rows you don’t use (Composer/Auto, Other models, Grok Bot, Hourly, Weekly, Fable)
 
 ## Usage
-1. Type the keyword → enabled rows (Composer/Auto, Other models, Grok Bot, Hourly, Weekly)
+1. Type the keyword → enabled rows (Composer/Auto, Other models, Grok Bot, Hourly, Weekly, Fable)
 2. Results are cached for ~60s
 
 ### Reading the rows
@@ -204,6 +204,7 @@ More info: https://github.com/giovannicoppola/alfred-aeye
 - `(🕐 40%, 5h, 11:30pm)` on Hourly when a session is active
 - **Hourly** — Claude 5-hour session limit (Claude Code icon)
 - **Weekly** — Claude weekly limit
+- **Fable** — Claude’s separate weekly limit for Fable (hidden if the plan has none)
 - Claude `experimental` = % from Anthropic’s OAuth usage API (not official statusline)
 
 ## Actions
@@ -350,7 +351,7 @@ More info: https://github.com/giovannicoppola/alfred-aeye
 				<string>Weekly (Claude)</string>
 			</dict>
 			<key>description</key>
-			<string>Uncheck rows you don’t use. All on by default.</string>
+			<string></string>
 			<key>label</key>
 			<string></string>
 			<key>type</key>
@@ -358,11 +359,30 @@ More info: https://github.com/giovannicoppola/alfred-aeye
 			<key>variable</key>
 			<string>show_claude_weekly</string>
 		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<true/>
+				<key>required</key>
+				<false/>
+				<key>text</key>
+				<string>Fable (Claude, weekly)</string>
+			</dict>
+			<key>description</key>
+			<string>Uncheck rows you don’t use. All on by default.</string>
+			<key>label</key>
+			<string></string>
+			<key>type</key>
+			<string>checkbox</string>
+			<key>variable</key>
+			<string>show_claude_fable</string>
+		</dict>
 	</array>
 	<key>variablesdontexport</key>
 	<array/>
 	<key>version</key>
-	<string>0.2.2</string>
+	<string>0.3.0</string>
 	<key>webaddress</key>
 	<string>https://github.com/giovannicoppola/alfred-aeye</string>
 </dict>

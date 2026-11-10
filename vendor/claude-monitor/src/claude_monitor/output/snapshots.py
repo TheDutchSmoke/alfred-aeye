@@ -402,6 +402,18 @@ def build_snapshot(
             status_pct = seven_pct if status_pct is None else max(status_pct, seven_pct)
             headline_confidence = _EXPERIMENTAL
 
+    # Per-model weekly cap (Fable), API only. It blocks just that model, so it
+    # does not drive the exit status; the key is absent when the plan has none.
+    seven_day_fable: Optional[Dict[str, Any]] = None
+    if api_limits and not api_limits.get("stale"):
+        api_fable = api_limits.get("seven_day_fable") or {}
+        if api_fable.get("used_percentage") is not None:
+            seven_day_fable = _api_block(api_fable)
+
+    limits: Dict[str, Any] = {"five_hour": five_hour, "seven_day": seven_day}
+    if seven_day_fable is not None:
+        limits["seven_day_fable"] = seven_day_fable
+
     if (
         official
         and official.get("stale")
@@ -437,10 +449,7 @@ def build_snapshot(
         "stale": snapshot_stale,
         "plan": plan,
         "plan_info": plan_info,
-        "limits": {
-            "five_hour": five_hour,
-            "seven_day": seven_day,
-        },
+        "limits": limits,
         "local": local,
         "local_history": {
             "label": "local_history",
